@@ -15,3 +15,11 @@ Compatible with pi zero:
 
 Dartboard insight during development:  
 Decathlon ED110 20€  
+
+To be added :  
+- GPIO management  
+- Install instruction  
+- welds instruction  
+- Documentation
+- Full translation from french bc my english isn't that good
+- Frame of the project not readdy at all
