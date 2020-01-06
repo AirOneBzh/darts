@@ -14,7 +14,7 @@ module.exports = function(server,con,path,fs,dir) {
         res.write('</div>\n' +
             '      </div>\n' +
             '    </div>\n' +
-            '  </div>')
+            '  </div>');
         res.write(foot);
         res.write('<script>\n' +
             '    $("#name").html("Loading...");\n' +
@@ -25,7 +25,7 @@ module.exports = function(server,con,path,fs,dir) {
             '    if (myRequest.readyState === 4) {\n' +
             '        $("#name").html(myRequest.responseText)\n' +
             '    }\n}\n' +
-            '</script>\n')
+            '</script>\n');
         res.end();
     });
-}
+};

@@ -26,7 +26,7 @@ module.exports = function(server,con,path,fs,dir) {
                 '      <div class="row">\n' +
                 '        <div class="col-md-8 mx-auto"> ');
 
-            res.write("<ul>")
+            res.write("<ul>");
             rows.forEach((element, index) => {
                 res.write('<li>' +
                     '   <a  href="profile?id=' + element.id + '" >' +
@@ -36,15 +36,15 @@ module.exports = function(server,con,path,fs,dir) {
                     '       </figure>' +
                     '   </a>\n' +
                     '</li>');
-            })
+            });
             res.write('</div>\n' +
                 '      </div>\n' +
                 '    </div>\n' +
-                '  </div>')
+                '  </div>');
             res.write(foot);
-            res.write("</ul>")
+            res.write("</ul>");
             res.write(foot);
             res.end();
         });
     });
-}
+};

@@ -2,7 +2,7 @@
 express = require('express');
 bodyParser = require("body-parser");
 path = require("path");
-fs = require("fs")
+fs = require("fs");
 mysql = require('mysql');
 dir = __dirname + "/html";
 multer = require("multer");
@@ -33,18 +33,19 @@ var server= express();
 console.log("Server start on http://localhost:"+port);
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.static(path.join(__dirname,"html")));
+server.use(express.static(path.join(__dirname,path.join("html","assets"))));
 server.listen(port);
 
 
-require('./index')(server,con,path,fs,dir)
-require('./annuaire')(server,con,path,fs,dir)
-require('./api')(server,con,path,fs,dir)
-require('./games')(server,con,path,fs,dir)
-require('./game')(server,con,path,fs,dir)
-require('./newgame')(server,con,path,fs,dir)
-require('./profile')(server,con,path,fs,dir)
-require('./signup')(server,con,path,fs,dir)
-require('./submit')(server,con,path,fs,dir)
+require('./index')(server,con,path,fs,dir);
+require('./annuaire')(server,con,path,fs,dir);
+require('./api')(server,con,path,fs,dir);
+require('./games')(server,con,path,fs,dir);
+require('./game')(server,con,path,fs,dir);
+require('./newgame')(server,con,path,fs,dir);
+require('./profile')(server,con,path,fs,dir);
+require('./signup')(server,con,path,fs,dir);
+require('./submit')(server,con,path,fs,dir);
 /*
 server.get('',function(req,res){
     res.sendFile(dir+'/');

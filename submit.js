@@ -54,7 +54,7 @@ module.exports = function(server,con,path,fs,dir) {
                                 fs.copyFile( path.join(dir, path.join("images",'default.png')), targetPath,(err)=>{
                                     if(err) throw err;
                                     console.log("file copied" + result[0].id)
-                                })
+                                });
                                 res.redirect("profile?id=" + result[0].id)
                             }
                         })
@@ -71,4 +71,4 @@ module.exports = function(server,con,path,fs,dir) {
             });
         }
     );
-}
+};
