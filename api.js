@@ -30,7 +30,9 @@ module.exports = function(server,con,path,fs,dir) {
         let id = req.params.id;
         con.query("SELECT concat('[',GROUP_CONCAT(concat('{`game_id`:',game_id,',`game_name`:`',game_name,'`,`gamemode`:`',gamemode,'`,`players`:[',players,']}')),']') as json from (SELECT game.id as 'game_id', game.name as 'game_name', gamemode.name as 'gamemode', group_concat(concat('{`id`:`',users.id,'`,`name`:`',users.name,'`}')) players from users, game, gamemode, playerSet where game.id_gamemode = gamemode.id and game.id_playerSet = playerSet.id and users.id = playerSet.player group by game_id order by game_id asc) as j", null, function (err, result) {
             res.contentType('application/json');
-            res.write(JSON.stringify(JSON.parse(result[0].json.replace(/`/g,'"'))));
+            if(result[0].json!=null) {
+                res.write(JSON.stringify(JSON.parse(result[0].json.replace(/`/g, '"'))));
+            }
             res.end()
         });
     });
@@ -149,10 +151,20 @@ module.exports = function(server,con,path,fs,dir) {
             "    ORDER BY `darts3`.`game_id` , `darts3`.`user_id`) darts4",id,(err,resfin)=>{
             res.contentType('application/json');
             if(err)throw err;
-
-            res.write(JSON.stringify(JSON.parse(resfin[0].json.replace(/`/g,'"'))));
+            if(result[0].json!=null) {
+                res.write(JSON.stringify(JSON.parse(resfin[0].json.replace(/`/g, '"'))));
+            }
             res.end()
         })
+    });
+
+    server.get('/api/gamemodes/', (req, res) => {
+        con.query("SELECT * from gamemode;",null, function (err, result) {
+            res.contentType('application/json');
+            if(err)throw err;
+            res.write(JSON.stringify(result));
+            res.end()
+        });
     });
 
     server.get('/api/game/:id/players', (req, res) => {
@@ -195,7 +207,9 @@ module.exports = function(server,con,path,fs,dir) {
         con.query("SELECT concat('[',group_concat('{`user_id`:',user_id,',`user_name`:`',user_name,'`,`data`:[',json,']}' order by user_id),']') as json from (SELECT  user_id, user_name, group_concat('{`game_id`: ',game_id,',`rounds`:[' ,rounds,']}') json from (SELECT player as 'user_id',users.name as 'user_name',id_game as 'game_id', group_concat('',round.id,'' order by id_game,round.id ) as rounds from round,users where player= users.id and dart = ? group by id_game ,dart) rounds group by user_id) rounds",id, function (err, result) {
             res.contentType('application/json');
             if(err)throw err;
-            res.write(JSON.stringify(JSON.parse(result[0].json.replace(/`/g,'"'))));
+            if(result[0].json!=null) {
+                res.write(JSON.stringify(JSON.parse(result[0].json.replace(/`/g, '"'))));
+            }
             res.end()
         });
     });

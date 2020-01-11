@@ -3,7 +3,7 @@ module.exports = function(server,con,path,fs,dir) {
     var upload = multer({dest: 'html/'});
 
     server.post(
-        "/submit",
+        "/signup",
         upload.single("file" /* name attribute of <file> element in your form */),
         (req, res) => {
             const name = req.body.name;
@@ -71,4 +71,11 @@ module.exports = function(server,con,path,fs,dir) {
             });
         }
     );
+
+    server.post(
+        "/update",
+        upload.single("file" /* name attribute of <file> element in your form */),
+        (req, res) => {
+
+        });
 };

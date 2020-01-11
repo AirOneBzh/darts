@@ -16,9 +16,11 @@ module.exports = function(server,con,path,fs,dir) {
             '    myRequest.open(\'GET\', \'/api/games/\');\n' +
             '    myRequest.send(null);\n' +
             '    myRequest.onreadystatechange = function () { \n' +
-            '    if (myRequest.readyState === 4) {\n' +
-            '       let t = JSON.parse(myRequest.responseText)\n' +
             '       let r ="";\n' +
+            '    if (myRequest.readyState === 4) {\n' +
+            '       if(myRequest.responseText != ""){\n' +
+            '       let t = JSON.parse(myRequest.responseText)\n' +
+
             '       t.forEach((element,index)=>{\n' +
             '           r+="<div class=\'row games\' style=\'padding: 10px 0px;margin-bottom: 10px;margin-top: 10px;\' onclick=\'document.location.href=\\\"/game/"+element.game_id+"\\\"\' >' +
             '           <div class=\'col-md-1\'>"+ element.game_id+"</div>' +
@@ -27,6 +29,8 @@ module.exports = function(server,con,path,fs,dir) {
             '           <div class=\'col-md-4\'>"+ writePlayers(element.players)+"</div>' +
             '       </div>";\n' +
             '       }) \n' +
+            '       console.log(r) \n' +
+            '       } \n' +
             '    $("#tab").html(r);' +
             '}\n}\n' +
             'function writePlayers(players){\n' +

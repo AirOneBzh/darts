@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PAGE settings -->
+    <title>Signup</title>
+    <meta name="description" content="Darts Creation player">
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="colorful.css">
+    <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+    <!-- Main CSS-->
+    <link href="assets/css/main.css" rel="stylesheet" media="all">
+    <script>
+        function encrypt()
+        {
+            var pass=document.getElementById('password').value;
+            var hide=document.getElementById('hide').value;
+            if(pass=="")
+            {
+                document.getElementById('err').innerHTML='Error:Password is missing';
+                return false;
+            }
+            else
+            {
+                document.getElementById("hide").value = document.getElementById("password").value;
+                var hash = CryptoJS.MD5(pass);
+                document.getElementById('password').value=hash;
+                return true;
+            }
+        }
+    </script>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark" style="opacity : 1;">
+    <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="http://home.airone.ovh:88/">
+        <i class="fa d-inline fa-lg fa-circle-o"></i>
+        <b> Darts</b>
+    </a>
+    </div>
+</nav>
+<div class="py-5 text-center" >
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-lg-8">
+                <h1>Avatar</h1>
+                <p class="mb-4">Ici change ta photo</p>
+                <div class="card-body">
+                    <form method="POST" name="update" id="update" enctype="multipart/form-data" >
+                        <div class="input-group">
+                            <input class="input--style-3" type="email" placeholder="Email" name="email">
+                        </div>
+                        <div class="input-group">
+                            <input type="hidden" name="hide" id="hide" />
+                            <input class="input--style-3" type="password" placeholder="Password" name="password">
+                        </div>
+                        <div class="input-group">
+                            <input class="input--style-3" type="file" accept="image/png, image/jpeg" id="file" name="file">
+                        </div>
+                        <div class="p-t-10">
+                            <button class="btn btn--pill btn--green" onclick="return encrypt()" type="submit">Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

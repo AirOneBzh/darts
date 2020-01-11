@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PAGE settings -->
+    <title>NewGame</title>
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="colorful.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="js/main.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark" style="opacity : 1;">
+    <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="http://home.airone.ovh:88/">
+        <i class="fa d-inline fa-lg fa-circle-o"></i>
+        <b> Darts</b>
+    </a> </div>
+</nav>
+<div class="py-5 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="mx-auto col-lg-8">
+                <h1>New game</h1>
+                <p class="mb-4">Une nouvelle partie?</p>
+                <form action="newgame" method="post" >
+                    <div class="input-group" style="text-align: center">
+                        <input type="name" class="input--style-3" name="name" style="text-align: center;background-color: #444;padding-left: 2%;border-radius: 5px;text-align: left;" id="name" placeholder="Nom"> </div>
+
+                    <div class="input-group">
+                        <div class="rs-select2 js-select-simple select--no-search" style="width: 100%">
+                            <select name="gamemode" id="select">
+                                <!-- TODO -->
+                            </select>
+                            <div class="select-dropdown"></div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group">
+                            <ul id="ul">
+                                <!-- TODO -->
+
+                            </ul>
+
+                        </div>
+                        <button class="btn btn--pill btn--green" type="submit">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center d-md-flex justify-content-between align-items-center">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+<script>
+    let id = getAllUrlParams().id;
+
+    var myRequest2 = new XMLHttpRequest();
+    myRequest2.open('GET', '/api/gamemodes/');
+    myRequest2.send(null);
+    myRequest2.onreadystatechange = function () {
+        if (myRequest2.readyState === 4) {
+            var j = JSON.parse(myRequest2.responseText)
+            j.forEach((element)=>{
+                $("#select").innerHTML = $("#signin").innerHTML+"<option value="+element.id+">"+element.name+"</option>";
+            })
+        }
+    }
+    var myRequest3 = new XMLHttpRequest();
+    myRequest3.open('GET', '/api/players/' + id + '/name');
+    myRequest3.send(null);
+    myRequest3.onreadystatechange = function () {
+        if (myRequest3.readyState === 4) {
+            var j = JSON.parse(myRequest3.responseText)
+            j.forEach((element)=>{
+                $("#ul").innerHTML = $("#ul").innerHTML +
+                    '<li>\n' +
+                    '    <input type="checkbox" name="\' + element.id + \'" id="cb\' + element.id + \'">\n' +
+                    '    <label for="cb\' + element.id + \'">\n' +
+                    '        <figure>\n' +
+                    '            <img src="avatar/\' + element.id + \'" title="\' + element.name + \'">\n' +
+                    '            <figcaption>\' + element.name + \'</figcaption>\n' +
+                    '        </figure>\n' +
+                    '    </label>\n' +
+                    '</li>';
+            })
+        }
+    }
+</script>
+
+<!--
+TODO
+select
+result2.forEach((element, index) => {
+                    res.write('<option value="'+element.id+'">'+element.name+'</option>')
+                });
+<li>
+    <input type="checkbox" name="' + element.id + '" id="cb' + element.id + '">
+    <label for="cb' + element.id + '">
+        <figure>
+            <img src="avatar/' + element.id + '" title="' + element.name + '">
+            <figcaption>' + element.name + '</figcaption>
+        </figure>
+    </label>
+</li>
+
+ul
+ result.forEach((element, index) => {
+                    res.write('<li>\n' +
+                        '                  <input type="checkbox" name="' + element.id + '" id="cb' + element.id + '">\n' +
+                        '                  <label for="cb' + element.id + '"> <figure><img src="avatar/' + element.id + '" title="' + element.name + '"><figcaption>' + element.name + '</figcaption></figure></label>\n' +
+                        '                </li>')
+                });
+
+-->
