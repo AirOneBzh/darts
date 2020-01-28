@@ -7,9 +7,9 @@
     <!-- PAGE settings -->
     <title>NewGame</title>
     <!-- CSS dependencies -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="colorful.css">
+    <link rel="stylesheet" href="assets/css/colorful.css">
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
     <script src="js/main.js" crossorigin="anonymous"></script>
 </head>
 
@@ -41,7 +41,6 @@
                     <div class="input-group">
                         <div class="input-group">
                             <ul id="ul">
-                                <!-- TODO -->
 
                             </ul>
 
@@ -66,8 +65,6 @@
 
 </html>
 <script>
-    let id = getAllUrlParams().id;
-
     var myRequest2 = new XMLHttpRequest();
     myRequest2.open('GET', '/api/gamemodes/');
     myRequest2.send(null);
@@ -75,24 +72,24 @@
         if (myRequest2.readyState === 4) {
             var j = JSON.parse(myRequest2.responseText)
             j.forEach((element)=>{
-                $("#select").innerHTML = $("#signin").innerHTML+"<option value="+element.id+">"+element.name+"</option>";
+                document.getElementById("select").innerHTML = document.getElementById("select").innerHTML+"<option value="+element.id+">"+element.name+"</option>";
             })
         }
     }
     var myRequest3 = new XMLHttpRequest();
-    myRequest3.open('GET', '/api/players/' + id + '/name');
+    myRequest3.open('GET', '/api/players/');
     myRequest3.send(null);
     myRequest3.onreadystatechange = function () {
         if (myRequest3.readyState === 4) {
             var j = JSON.parse(myRequest3.responseText)
             j.forEach((element)=>{
-                $("#ul").innerHTML = $("#ul").innerHTML +
+               document.getElementById("ul").innerHTML = document.getElementById("ul").innerHTML +
                     '<li>\n' +
-                    '    <input type="checkbox" name="\' + element.id + \'" id="cb\' + element.id + \'">\n' +
-                    '    <label for="cb\' + element.id + \'">\n' +
+                    '    <input type="checkbox" name="' + element.id + '" id="cb' + element.id + '">\n' +
+                    '    <label for="cb' + element.id + '">\n' +
                     '        <figure>\n' +
-                    '            <img src="avatar/\' + element.id + \'" title="\' + element.name + \'">\n' +
-                    '            <figcaption>\' + element.name + \'</figcaption>\n' +
+                    '            <img src="avatar/' + element.id + '" title="\' + element.name + \'">\n' +
+                    '            <figcaption>' + element.name + '</figcaption>\n' +
                     '        </figure>\n' +
                     '    </label>\n' +
                     '</li>';
@@ -100,29 +97,3 @@
         }
     }
 </script>
-
-<!--
-TODO
-select
-result2.forEach((element, index) => {
-                    res.write('<option value="'+element.id+'">'+element.name+'</option>')
-                });
-<li>
-    <input type="checkbox" name="' + element.id + '" id="cb' + element.id + '">
-    <label for="cb' + element.id + '">
-        <figure>
-            <img src="avatar/' + element.id + '" title="' + element.name + '">
-            <figcaption>' + element.name + '</figcaption>
-        </figure>
-    </label>
-</li>
-
-ul
- result.forEach((element, index) => {
-                    res.write('<li>\n' +
-                        '                  <input type="checkbox" name="' + element.id + '" id="cb' + element.id + '">\n' +
-                        '                  <label for="cb' + element.id + '"> <figure><img src="avatar/' + element.id + '" title="' + element.name + '"><figcaption>' + element.name + '</figcaption></figure></label>\n' +
-                        '                </li>')
-                });
-
--->

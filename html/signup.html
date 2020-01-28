@@ -9,7 +9,7 @@
   <meta name="description" content="Darts Creation player">
   <!-- CSS dependencies -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="colorful.css">
+  <link rel="stylesheet" href="assets/css/colorful.css">
   <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
@@ -22,6 +22,7 @@
   <script>
     function encrypt()
     {
+      console.log(document.getElementById('password').value)
       var pass=document.getElementById('password').value;
       var hide=document.getElementById('hide').value;
       if(pass=="")
@@ -33,7 +34,7 @@
       {
         document.getElementById("hide").value = document.getElementById("password").value;
         var hash = CryptoJS.MD5(pass);
-        document.getElementById('password').value=hash;
+        document.getElementById('hide').value=hash;
         return true;
       }
     }
@@ -64,7 +65,7 @@
               </div>
               <div class="input-group">
                 <input type="hidden" name="hide" id="hide" />
-                <input class="input--style-3" type="password" placeholder="Password" name="password">
+                <input class="input--style-3" id="password" type="password" placeholder="Password" name="password">
               </div>
               <div class="input-group">
                 <input class="input--style-3" type="file" accept="image/png, image/jpeg" id="file" name="file">
@@ -81,3 +82,7 @@
 </body>
 
 </html>
+
+<!--
+  ASYNC TODO
+-->

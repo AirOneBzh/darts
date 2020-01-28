@@ -7,7 +7,7 @@ module.exports = function(server,con,path,fs,dir) {
         upload.single("file" /* name attribute of <file> element in your form */),
         (req, res) => {
             const name = req.body.name;
-            const pass = req.body.password;
+            const pass = req.body.hide;
             const mail = req.body.email;
 
 

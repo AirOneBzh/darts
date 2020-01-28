@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Matchs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/colorful.css">
+    <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container d-flex justify-content-center">
+        <a class="navbar-brand" href="http://home.airone.ovh:88/">
+            <i class="fa d-inline fa-lg fa-circle-o"></i>
+            <b> Darts</b>
+        </a>
+    </div>
+</nav>
+
+<div class="py-5 text-center align-items-center d-flex" >
+    <div class="container py-5" id="tab">
+    </div>
+</div>
+
+</body>
+
+</html>
+
+<script>
+    document.getElementById("tab").innerHTML = "En chargement...";
+    var myRequest = new XMLHttpRequest();
+    myRequest.open('GET', '/api/games/');
+    myRequest.send(null);
+    myRequest.onreadystatechange = function () {
+        let r ="";
+        if (myRequest.readyState === 4) {
+            if(myRequest.responseText != ""){
+                let t = JSON.parse(myRequest.responseText)
+
+                t.forEach((element)=>{
+                    r+="<div class='row games' style='padding: 10px 0px;margin-bottom: 10px;margin-top: 10px;' onclick='document.location.href='/game/"+element.game_id+"' >"+
+                        "<div class='col-md-1'>"+ element.game_id+"</div>"+
+                    "<div class='col-md-1'>"+ element.game_name+"</div>"+
+                    "<div class='col-md-3'>"+element.gamemode +"</div>"+
+                    "<div class='col-md-4'>"+ writePlayers(element.players)+"</div>"+
+                    "</div>";
+                })
+            }
+            document.getElementById("tab").innerHTML = r;
+        }}
+    function writePlayers(players){
+        let r= "<ul style='padding:0px;margin:0px'>";
+        players.forEach((element)=>{
+            r+= "<li>"+
+                "<a  href='profile?id="+element.id +"' >"+
+                "<label style='padding:0px;margin:0px;'>" +
+                "<img style='width:30px;height:30px;' src='avatar/"+ element.id + " title='"+ element.name + "'>"+
+                "</a>"+
+            "</li>";
+        })
+        return r+"</ul>";
+    }
+</script>
