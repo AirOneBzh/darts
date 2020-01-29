@@ -8,81 +8,69 @@
   <title>Signup</title>
   <meta name="description" content="Darts Creation player">
   <!-- CSS dependencies -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="assets/css/colorful.css">
-  <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <link rel="stylesheet" href="assets/css/main.css">
+
   <!-- Font special for pages-->
   <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
+  <script src="assets/js/fontawesome.js"></script>
 
+  <!-- Croppie -->
+  <link  href="assets/css/croppie.css" rel="stylesheet">
+  <script src="assets/js/croppie.js"></script>
 
-  <!-- Main CSS-->
-  <link href="assets/css/main.css" rel="stylesheet" media="all">
-  <script>
-    function encrypt()
-    {
-      console.log(document.getElementById('password').value)
-      var pass=document.getElementById('password').value;
-      var hide=document.getElementById('hide').value;
-      if(pass=="")
-      {
-        document.getElementById('err').innerHTML='Error:Password is missing';
-        return false;
-      }
-      else
-      {
-        document.getElementById("hide").value = document.getElementById("password").value;
-        var hash = CryptoJS.MD5(pass);
-        document.getElementById('hide').value=hash;
-        return true;
-      }
-    }
-  </script>
+  <!-- JQuery -->
+  <script src="assets/js/jquery.min.js"></script>
+
+  <!-- Crypt -->
+  <script src="assets/js/aes.js"></script>
+
+  <script src="assets/js/signasync.js"></script>
 </head>
 
-<body>
-  <nav class="navbar navbar-dark bg-dark" style="opacity : 1;">
-    <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="http://home.airone.ovh:88/">
-      <i class="fa d-inline fa-lg fa-circle-o"></i>
-        <b> Darts</b>
-      </a>
-    </div>
-  </nav>
-  <div class="py-5 text-center" >
-    <div class="container">
-      <div class="row">
-        <div class="mx-auto col-lg-8">
-          <h1>New player</h1>
-          <p class="mb-4">Un nouvel être parmi nous</p>
-          <div class="card-body">
-            <form method="POST" name="signin" id="signin" enctype="multipart/form-data" >
-              <div class="input-group">
-                <input class="input--style-3" type="text" placeholder="Name" name="name">
-              </div>
-              <div class="input-group">
-                <input class="input--style-3" type="email" placeholder="Email" name="email">
-              </div>
-              <div class="input-group">
-                <input type="hidden" name="hide" id="hide" />
-                <input class="input--style-3" id="password" type="password" placeholder="Password" name="password">
-              </div>
-              <div class="input-group">
-                <input class="input--style-3" type="file" accept="image/png, image/jpeg" id="file" name="file">
-              </div>
-              <div class="p-t-10">
-                <button class="btn btn--pill btn--green" onclick="return encrypt()" type="submit">Envoyer</button>
-              </div>
-            </form>
+<body onload="$uploadCrop.setZoom(0)">
+<nav class="navbar navbar-dark bg-dark" style="opacity : 1;">
+  <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="/">
+    <i class="fa d-inline fa-lg fa-circle-o"></i>
+    <b> Darts</b>
+  </a>
+  </div>
+</nav>
+<div class="py-5 text-center" >
+  <div class="container">
+    <div class="row">
+      <div class="mx-auto col-lg-8">
+        <h1>New player</h1>
+        <p class="mb-4">Un nouvel être parmi nous</p>
+        <div class="card-body">
+          <div id="signin"  >
+            <div class="input-group">
+              <input class="input--style-3" type="text" placeholder="Name" name="name" onkeyup="checkname()" id="name">
+            </div>
+            <div class="input-group">
+              <input class="input--style-3" type="email" placeholder="Email" name="email" onkeyup="checkmail()" id="email">
+            </div>
+            <div class="input-group">
+              <input type="hidden" name="hide" id="hide" />
+              <input class="input--style-3" style="border:1px solid red" id="password" type="password" onkeyup="if($('#password')[0].value=='') {$('#password').css('border','1px solid red') }else{$('#password').css('border','1px solid green')}" placeholder="Password" name="password" id="pass">
+            </div>
+            <div class="input-group">
+              <input type="file" class="input--style-3" id="in" onchange="readFile(this)">
+              <img style="height:100%;width: 100%" id="my-image" src="/avatar/0" />
+            </div>
+            <div class="p-t-10">
+              <button class="btn btn--pill btn--green" onclick="sendData(document.getElementById('upsign'))" >Envoyer</button>
+              <button class="btn btn--pill btn--green" onclick="validate()">Envoyer</button>
+            </div>
+            <img id="base">
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </body>
 
 </html>
-
-<!--
-  ASYNC TODO
--->
+<script src="assets/js/mycrop.js"></script>

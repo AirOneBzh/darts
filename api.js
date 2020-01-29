@@ -13,12 +13,36 @@ module.exports = function(server,con,path,fs,dir) {
     });
     server.get('/api/player/:id/', (req, res) => {
         let id = req.params.id;
-        con.query('SELECT id,name,email from users where id=' + id + ';', null, function (err, result) {
+        let url = 'SELECT id,name,email from users where id=' + id + ';';
+        con.query(url, null, function (err, result) {
             res.contentType('application/json');
             let r = JSON.stringify(result[0]);
             res.end(r)
         });
     });
+
+    server.get('/api/check/playername/:name/', (req, res) => {
+        let name = req.params.name;
+        console.log(name)
+        let url = 'SELECT count(id) as ans from users where name="' + name + '";';
+        con.query(url, null, function (err, result) {
+            res.contentType('application/json');
+            let r = JSON.stringify(result[0]);
+            res.end(r)
+        });
+    });
+    server.get('/api/check/playermail/:mail/', (req, res) => {
+        let mail = req.params.mail;
+        console.log(mail)
+
+        let url = 'SELECT count(id) as ans from users where email="' + mail + '";';
+        con.query(url, null, function (err, result) {
+            res.contentType('application/json');
+            let r = JSON.stringify(result[0]);
+            res.end(r)
+        });
+    });
+
     server.get('/api/player/:id/name', (req, res) => {
         let id = req.params.id;
         con.query('SELECT name from users where id=' + id + ';', null, function (err, result) {
@@ -242,25 +266,35 @@ module.exports = function(server,con,path,fs,dir) {
         });
     });
 
+    server.post("/api/signup",(req,res)=>{
+        var json = JSON.parse(Object.keys(req.body)[0]);
+        console.log(json)
+        res.end("OK")
 
+    })
 
     server.get('/avatar/:id', function (req, res) {
         let id = req.params.id;
-        con.query("SELECT count(*) as count from users where id = ?;",id, function (err, result) {
-            if (err) throw err;
+        if(id==0){
+            res.sendFile(__dirname + "/html/images/default.png");
+        }
+        else {
+            con.query("SELECT count(*) as count from users where id = ?;", id, function (err, result) {
+                if (err) throw err;
 
-            if(result[0].count == "1") {
-                if (imgExi(id, "jpg"))
-                    res.sendFile(__dirname + "/html/images/" + id + ".jpg");
-                else if (imgExi(id, "png"))
-                    res.sendFile(__dirname + "/html/images/" + id + ".png");
-                else if (imgExi(id, "jpeg"))
-                    res.sendFile(__dirname + "/html/images/" + id + ".jpeg");
-                else res.sendFile(__dirname + "/html/images/default.png");
-            }else{
-                res.sendStatus(404);
-            }
-        })
+                if (result[0].count == "1") {
+                    if (imgExi(id, "jpg"))
+                        res.sendFile(__dirname + "/html/images/" + id + ".jpg");
+                    else if (imgExi(id, "png"))
+                        res.sendFile(__dirname + "/html/images/" + id + ".png");
+                    else if (imgExi(id, "jpeg"))
+                        res.sendFile(__dirname + "/html/images/" + id + ".jpeg");
+                    else res.sendFile(__dirname + "/html/images/default.png");
+                } else {
+                    res.sendStatus(404);
+                }
+            })
+        }
     });
 
 };
