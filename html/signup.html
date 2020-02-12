@@ -22,14 +22,14 @@
 
   <!-- JQuery -->
   <script src="assets/js/jquery.min.js"></script>
-
+  <script src="http://malsup.github.com/jquery.form.js"></script>
   <!-- Crypt -->
   <script src="assets/js/aes.js"></script>
 
   <script src="assets/js/signasync.js"></script>
 </head>
 
-<body onload="$uploadCrop.setZoom(0)">
+<body>
 <nav class="navbar navbar-dark bg-dark" style="opacity : 1;">
   <div class="container d-flex justify-content-center"> <a class="navbar-brand" href="/">
     <i class="fa d-inline fa-lg fa-circle-o"></i>
@@ -42,9 +42,9 @@
     <div class="row">
       <div class="mx-auto col-lg-8">
         <h1>New player</h1>
-        <p class="mb-4">Un nouvel être parmi nous</p>
+        <p class="mb-4" id="msg">Un nouvel être parmi nous</p>
         <div class="card-body">
-          <div id="signin"  >
+          <form id="signup" action="/signup" method="post">
             <div class="input-group">
               <input class="input--style-3" type="text" placeholder="Name" name="name" onkeyup="checkname()" id="name">
             </div>
@@ -56,15 +56,16 @@
               <input class="input--style-3" style="border:1px solid red" id="password" type="password" onkeyup="if($('#password')[0].value=='') {$('#password').css('border','1px solid red') }else{$('#password').css('border','1px solid green')}" placeholder="Password" name="password" id="pass">
             </div>
             <div class="input-group">
-              <input type="file" class="input--style-3" id="in" onchange="readFile(this)">
-              <img style="height:100%;width: 100%" id="my-image" src="/avatar/0" />
+              <input type="file" class="input--style-3" id="in" name="file" onchange="readFile(this)">
+              <img style="height:250px;display: block;
+  margin-left: auto;
+  margin-right: auto;" id="my-image" src="/avatar/0" />
             </div>
             <div class="p-t-10">
-              <button class="btn btn--pill btn--green" onclick="sendData(document.getElementById('upsign'))" >Envoyer</button>
-              <button class="btn btn--pill btn--green" onclick="validate()">Envoyer</button>
+              <a class="btn btn--pill btn--green" onclick="sendData()" >Envoyer</a>
+              <a class="btn btn--pill btn--green" onclick="validate()">Vérif</a>
             </div>
-            <img id="base">
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -73,4 +74,16 @@
 </body>
 
 </html>
-<script src="assets/js/mycrop.js"></script>
+<script>
+  function readFile(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        $('#my-image').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

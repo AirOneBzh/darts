@@ -54,128 +54,132 @@ module.exports = function(server,con,path,fs,dir) {
         let id = req.params.id;
         con.query("SELECT concat('[',GROUP_CONCAT(concat('{`game_id`:',game_id,',`game_name`:`',game_name,'`,`gamemode`:`',gamemode,'`,`players`:[',players,']}')),']') as json from (SELECT game.id as 'game_id', game.name as 'game_name', gamemode.name as 'gamemode', group_concat(concat('{`id`:`',users.id,'`,`name`:`',users.name,'`}')) players from users, game, gamemode, playerSet where game.id_gamemode = gamemode.id and game.id_playerSet = playerSet.id and users.id = playerSet.player group by game_id order by game_id asc) as j", null, function (err, result) {
             res.contentType('application/json');
+
             if(result[0].json!=null) {
                 res.write(JSON.stringify(JSON.parse(result[0].json.replace(/`/g, '"'))));
+            }else{
+                console.log(result[0]);
             }
+            console.log("games");
             res.end()
         });
     });
 
     server.get('/api/game/:id', (req, res) => {
         let id = req.params.id;
-        con.query("SELECT \n" +
-            "        CONCAT('[',\n" +
-            "                GROUP_CONCAT('{`game_id`:',\n" +
-            "                    `darts4`.`game_id`,\n" +
-            "                    ',`game_name`:`',\n" +
-            "                    `darts4`.`game_name`,\n" +
-            "                    '`,`gamemode`:`',\n" +
-            "                    `darts4`.`gamemode`,\n" +
-            "                    '`,`status`:`',\n" +
-            "                    `darts4`.`status`,\n" +
-            "                    '`,`players`:',\n" +
-            "                    `darts4`.`players`,\n" +
-            "                    '}'\n" +
-            "                    ORDER BY `darts4`.`game_id` ASC\n" +
-            "                    SEPARATOR ','),\n" +
-            "                ']') AS `json`\n" +
-            "    FROM\n" +
-            "        (SELECT \n" +
-            "        `darts3`.`game_id` AS `game_id`,\n" +
-            "        `darts3`.`game_name` AS `game_name`,\n" +
-            "        `darts3`.`gamemode` AS `gamemode`,\n" +
-            "        `darts3`.`status` AS `status`,\n" +
-            "        CONCAT('[',\n" +
-            "                GROUP_CONCAT('{`user_id`:',\n" +
-            "                    `darts3`.`user_id`,\n" +
-            "                    ',`user_name`:`',\n" +
-            "                    `darts3`.`user_name`,\n" +
-            "                    '`,`rounds`:',\n" +
-            "                    `darts3`.`rounds`,\n" +
-            "                    '}'\n" +
-            "                    ORDER BY `darts3`.`user_id` ASC\n" +
-            "                    SEPARATOR ','),\n" +
-            "                ']') AS `players`\n" +
-            "    FROM\n" +
-            "        (SELECT \n" +
-            "        `darts2`.`game_id` AS `game_id`,\n" +
-            "        `darts2`.`game_name` AS `game_name`,\n" +
-            "        `darts2`.`gamemode` AS `gamemode`,\n" +
-            "        `darts2`.`status` AS `status`,\n" +
-            "        `darts2`.`user_id` AS `user_id`,\n" +
-            "        `darts2`.`user_name` AS `user_name`,\n" +
-            "        CONCAT('[',\n" +
-            "                GROUP_CONCAT('{`round_id`:',\n" +
-            "                    `darts2`.`round_id`,\n" +
-            "                    ',`round_pts`:',\n" +
-            "                    `darts2`.`round_pts`,\n" +
-            "                    ',`coups`:',\n" +
-            "                    `darts2`.`coups`,\n" +
-            "                    '}'\n" +
-            "                    ORDER BY `darts2`.`round_id` ASC\n" +
-            "                    SEPARATOR ','),\n" +
-            "                ']') AS `rounds`\n" +
-            "    FROM\n" +
-            "        (SELECT \n" +
-            "        `darts1`.`game_id` AS `game_id`,\n" +
-            "        `darts1`.`game_name` AS `game_name`,\n" +
-            "        `darts1`.`gamemode` AS `gamemode`,\n" +
-            "        `darts1`.`status` AS `status`,\n" +
-            "        `darts1`.`user_id` AS `user_id`,\n" +
-            "        `darts1`.`user_name` AS `user_name`,\n" +
-            "        `darts1`.`round_id` AS `round_id`,\n" +
-            "        `darts1`.`round_pts` AS `round_pts`,\n" +
-            "        CONCAT('[',\n" +
-            "                GROUP_CONCAT('{`id_coup`:',\n" +
-            "                    `darts1`.`id_coup`,\n" +
-            "                    ',`zone`:',\n" +
-            "                    `darts1`.`zone`,\n" +
-            "                    ',`mult`:',\n" +
-            "                    `darts1`.`mult`,\n" +
-            "                    '}'\n" +
-            "                    ORDER BY `darts1`.`id_coup` ASC\n" +
-            "                    SEPARATOR ','),\n" +
-            "                ']') AS `coups`\n" +
-            "    FROM\n" +
-            "        (SELECT \n" +
-            "        `game`.`id` AS `game_id`,\n" +
-            "        `game`.`name` AS `game_name`,\n" +
-            "        `gamemode`.`name` AS `gamemode`,\n" +
-            "        `game`.`status` AS `status`,\n" +
-            "        `users`.`id` AS `user_id`,\n" +
-            "        `users`.`name` AS `user_name`,\n" +
-            "        `round`.`id` AS `round_id`,\n" +
-            "        `round`.`pts` AS `round_pts`,\n" +
-            "        `round`.`dart` AS `round_dart`,\n" +
-            "        `dartzones`.`id_coup` AS `id_coup`,\n" +
-            "        `dartzones`.`zone` AS `zone`,\n" +
-            "        `dartzones`.`mult` AS `mult`\n" +
-            "    FROM\n" +
-            "        ((((((`dartzones`\n" +
-            "        JOIN `gamemode`)\n" +
-            "        JOIN `game`)\n" +
-            "        JOIN `users`)\n" +
-            "        JOIN `round`)\n" +
-            "        JOIN `playerSet`)\n" +
-            "        JOIN `viewParam`)\n" +
-            "    WHERE\n" +
-            "        `game`.`id` = `round`.`id_game`\n" +
-            "            AND `round`.`player` = `users`.`id`\n" +
-            "            AND `round`.`id` = `dartzones`.`id`\n" +
-            "            AND `game`.`id_gamemode` = `gamemode`.`id`\n" +
-            "            AND `game`.`id_playerSet` = `playerSet`.`id`\n" +
-            "            AND `users`.`id` = `playerSet`.`player`\n" +
-            "            AND `game`.`id` = ?\n" +
-            "    ORDER BY `game`.`id` , `users`.`id` , `round`.`id` , `dartzones`.`id_coup`) darts1\n" +
-            "    GROUP BY `darts1`.`game_id` , `darts1`.`user_id` , `darts1`.`round_id`\n" +
-            "    ORDER BY `darts1`.`game_id` , `darts1`.`user_id` , `darts1`.`round_id`) darts2\n" +
-            "    GROUP BY `darts2`.`game_id` , `darts2`.`user_id`\n" +
-            "    ORDER BY `darts2`.`game_id` , `darts2`.`user_id` , `darts2`.`round_id`) darts3\n" +
-            "    GROUP BY `darts3`.`game_id`\n" +
-            "    ORDER BY `darts3`.`game_id` , `darts3`.`user_id`) darts4",id,(err,resfin)=>{
+        con.query("SELECT\n" +
+            "                    CONCAT('[',\n" +
+            "                            GROUP_CONCAT('{`game_id`:',\n" +
+            "                                `darts4`.`game_id`,\n" +
+            "                                ',`game_name`:`',\n" +
+            "                                `darts4`.`game_name`,\n" +
+            "                                '`,`gamemode`:`',\n" +
+            "                                `darts4`.`gamemode`,\n" +
+            "                                '`,`status`:`',\n" +
+            "                                `darts4`.`status`,\n" +
+            "                                '`,`players`:',\n" +
+            "                                `darts4`.`players`,\n" +
+            "                                '}'\n" +
+            "                                ORDER BY `darts4`.`game_id` ASC\n" +
+            "                                SEPARATOR ','),\n" +
+            "                            ']') AS `json`\n" +
+            "                FROM\n" +
+            "                    (SELECT\n" +
+            "                    `darts3`.`game_id` AS `game_id`,\n" +
+            "                    `darts3`.`game_name` AS `game_name`,\n" +
+            "                    `darts3`.`gamemode` AS `gamemode`,\n" +
+            "                    `darts3`.`status` AS `status`,\n" +
+            "                    CONCAT('[',\n" +
+            "                            GROUP_CONCAT('{`user_id`:',\n" +
+            "                                `darts3`.`user_id`,\n" +
+            "                                ',`user_name`:`',\n" +
+            "                                `darts3`.`user_name`,\n" +
+            "                                '`,`rounds`:',\n" +
+            "                                `darts3`.`rounds`,\n" +
+            "                                '}'\n" +
+            "                                ORDER BY `darts3`.`user_id` ASC\n" +
+            "                                SEPARATOR ','),\n" +
+            "                            ']') AS `players`\n" +
+            "                FROM\n" +
+            "                    (SELECT\n" +
+            "                    `darts2`.`game_id` AS `game_id`,\n" +
+            "                    `darts2`.`game_name` AS `game_name`,\n" +
+            "                    `darts2`.`gamemode` AS `gamemode`,\n" +
+            "                    `darts2`.`status` AS `status`,\n" +
+            "                    `darts2`.`user_id` AS `user_id`,\n" +
+            "                    `darts2`.`user_name` AS `user_name`,\n" +
+            "                    CONCAT('[',\n" +
+            "                            GROUP_CONCAT('{`round_id`:',\n" +
+            "                                `darts2`.`round_id`,\n" +
+            "                                ',`round_pts`:',\n" +
+            "                                `darts2`.`round_pts`,\n" +
+            "                                ',`coups`:',\n" +
+            "                                `darts2`.`coups`,\n" +
+            "                                '}'\n" +
+            "                                ORDER BY `darts2`.`round_id` ASC\n" +
+            "                                SEPARATOR ','),\n" +
+            "                            ']') AS `rounds`\n" +
+            "                FROM\n" +
+            "                    (SELECT\n" +
+            "                    `darts1`.`game_id` AS `game_id`,\n" +
+            "                    `darts1`.`game_name` AS `game_name`,\n" +
+            "                    `darts1`.`gamemode` AS `gamemode`,\n" +
+            "                    `darts1`.`status` AS `status`,\n" +
+            "                    `darts1`.`user_id` AS `user_id`,\n" +
+            "                    `darts1`.`user_name` AS `user_name`,\n" +
+            "                    `darts1`.`round_id` AS `round_id`,\n" +
+            "                    `darts1`.`round_pts` AS `round_pts`,\n" +
+            "                    CONCAT('[',\n" +
+            "                            GROUP_CONCAT('{`id_coup`:',\n" +
+            "                                `darts1`.`id_coup`,\n" +
+            "                                ',`zone`:',\n" +
+            "                                `darts1`.`zone`,\n" +
+            "                                ',`mult`:',\n" +
+            "                                `darts1`.`mult`,\n" +
+            "                                '}'\n" +
+            "                                ORDER BY `darts1`.`id_coup` ASC\n" +
+            "                                SEPARATOR ','),\n" +
+            "                            ']') AS `coups`\n" +
+            "                FROM\n" +
+            "                    (SELECT\n" +
+            "                    `game`.`id` AS `game_id`,\n" +
+            "                    `game`.`name` AS `game_name`,\n" +
+            "                    `gamemode`.`name` AS `gamemode`,\n" +
+            "                    `game`.`status` AS `status`,\n" +
+            "                    `users`.`id` AS `user_id`,\n" +
+            "                    `users`.`name` AS `user_name`,\n" +
+            "                    `round`.`id` AS `round_id`,\n" +
+            "                    `round`.`pts` AS `round_pts`,\n" +
+            "                    `round`.`dart` AS `round_dart`,\n" +
+            "                    `dartzones`.`id_coup` AS `id_coup`,\n" +
+            "                    `dartzones`.`zone` AS `zone`,\n" +
+            "                    `dartzones`.`mult` AS `mult`\n" +
+            "                FROM\n" +
+            "                    (((((`dartzones`\n" +
+            "                    JOIN `gamemode`)\n" +
+            "                    JOIN `game`)\n" +
+            "                    JOIN `users`)\n" +
+            "                    JOIN `round`)\n" +
+            "                    JOIN `playerSet`)\n" +
+            "                WHERE\n" +
+            "                    `game`.`id` = `round`.`id_game`\n" +
+            "                        AND `round`.`player` = `users`.`id`\n" +
+            "                        AND `round`.`id` = `dartzones`.`id`\n" +
+            "                        AND `game`.`id_gamemode` = `gamemode`.`id`\n" +
+            "                        AND `game`.`id_playerSet` = `playerSet`.`id`\n" +
+            "                        AND `users`.`id` = `playerSet`.`player`\n" +
+            "                        AND `game`.`id` = ?\n" +
+            "                ORDER BY `game`.`id` , `users`.`id` , `round`.`id` , `dartzones`.`id_coup`) darts1\n" +
+            "                GROUP BY `darts1`.`game_id` , `darts1`.`user_id` , `darts1`.`round_id`\n" +
+            "                ORDER BY `darts1`.`game_id` , `darts1`.`user_id` , `darts1`.`round_id`) darts2\n" +
+            "                GROUP BY `darts2`.`game_id` , `darts2`.`user_id`\n" +
+            "                ORDER BY `darts2`.`game_id` , `darts2`.`user_id`) darts3\n" +
+            "                GROUP BY `darts3`.`game_id`\n" +
+            "                ORDER BY `darts3`.`game_id`) darts4",id,(err,resfin)=>{
             res.contentType('application/json');
             if(err)throw err;
-            if(result[0].json!=null) {
+            console.log(resfin[0].json)
+            if(resfin[0].json!=null) {
                 res.write(JSON.stringify(JSON.parse(resfin[0].json.replace(/`/g, '"'))));
             }
             res.end()
@@ -267,9 +271,6 @@ module.exports = function(server,con,path,fs,dir) {
     });
 
     server.post("/api/signup",(req,res)=>{
-        var json = JSON.parse(Object.keys(req.body)[0]);
-        console.log(json)
-        res.end("OK")
 
     })
 

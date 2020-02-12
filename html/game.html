@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="assets/css/colorful.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
+    <script src="assets/js/fontawesome.js"></script>
+
+    <!-- Croppie -->
+    <link  href="assets/css/croppie.css" rel="stylesheet">
+    <script src="assets/js/croppie.js"></script>
+
+    <!-- JQuery -->
+    <script src="assets/js/jquery.min.js"></script>
+    <!-- param -->
+    <script src="assets/js/getParam.js"></script>
+
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+    <div class="container"> <a class="navbar-brand" href="/">
+        <i class="fa d-inline fa-lg fa-circle-o"></i>
+        <b> Darts</b>
+    </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar11">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbar11">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item m-1" > <span style="color:#AAAAAA;font-size: 13px">ID: </span><span id="navid"></span> </li>
+                <li class="nav-item m-1" > <span style="color:#AAAAAA;font-size: 13px">Name: </span><span id="navname"></span> </li>
+                <li class="nav-item m-1" > <span style="color:#AAAAAA;font-size: 13px">Mode: </span><span id="navgamemode"></span> </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item m-1">
+                    <a id="asJSON"> As JSON</a>
+                </li>
+                <li class="nav-item m-1">
+                    <a href="#" onclick="refresh()" id="refresh"> Refresh</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="text-center align-items-center d-flex" >
+    <div class="container py-1" id="tab">
+
+    </div>
+</div>
+</body>
+</html>
+<script>
+    let id = getAllUrlParams().id;
+    console.log(id)
+    $("#navid").html(id);
+    $("#asJSON").attr("href" ,"/api/game/" +id);
+    $("#refresh").onclick = "refresh("+id+")";
+</script>
+<script src="/js/gameAsync.js"></script>

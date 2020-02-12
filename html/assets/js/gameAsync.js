@@ -50,64 +50,67 @@ function refresh(){
     myRequest.send(null);
     myRequest.onreadystatechange = function () {
         if (myRequest.readyState === 4) {
-            let t = JSON.parse(myRequest.responseText)
-            console.log(t)
-            t.forEach((element)=>{
-                var myRequest2 = new XMLHttpRequest();
-                myRequest2.open('GET', '/api/game/'+id+'/player/'+element.id+'/points');
-                myRequest2.send(null);
-                myRequest2.onreadystatechange = function () {
-                    if (myRequest2.readyState === 4) {
-                        console.log(myRequest2.responseText)
-                        let rt;
-                        if(myRequest2.responseText == 'null'){
-                            rt = 0;
-                        }else{
-                            rt = myRequest2.responseText;
-                        }
-                        $("#total"+element.id).html(rt)
-                        var myRequest3 = new XMLHttpRequest();
-                        myRequest3.open('GET', '/api/game/'+id+'/player/'+element.id+'/round');
-                        myRequest3.send(null);
-                        myRequest3.onreadystatechange = function () {
-                            if (myRequest3.readyState === 4) {
-                                let rr;
-                                if(myRequest3.responseText == 'null'){
-                                    rr = 0;
-                                }else{
-                                    rr = myRequest3.responseText;
-                                }
-                                $("#round"+element.id).html(rr)
-                                var myRequest4 = new XMLHttpRequest();
-                                myRequest4.open('GET', '/api/game/'+id+'/player/'+element.id+'/round/'+rr);
-                                myRequest4.send(null);
-                                myRequest4.onreadystatechange = function () {
-                                    if (myRequest4.readyState === 4) {
-                                        let tt = JSON.parse(myRequest4.responseText);
-                                        $("#z"+element.id+"1").html(tt[0].zone)
-                                        $("#m"+element.id+"1").html(tt[0].mult)
-                                        $("#p"+element.id+"1").html(tt[0].zone * tt[0].mult)
+            if (myRequest.responseText === "") {
 
-                                        $("#z"+element.id+"2").html(tt[1].zone)
-                                        $("#m"+element.id+"2").html(tt[1].mult)
-                                        $("#p"+element.id+"2").html(tt[1].zone * tt[0].mult)
+            } else
+            {
+                let t = JSON.parse(myRequest.responseText)
+                t.forEach((element) => {
+                    var myRequest2 = new XMLHttpRequest();
+                    myRequest2.open('GET', '/api/game/' + id + '/player/' + element.id + '/points');
+                    myRequest2.send(null);
+                    myRequest2.onreadystatechange = function () {
+                        if (myRequest2.readyState === 4) {
+                            console.log(myRequest2.responseText)
+                            let rt;
+                            if (myRequest2.responseText == 'null') {
+                                rt = 0;
+                            } else {
+                                rt = myRequest2.responseText;
+                            }
+                            $("#total" + element.id).html(rt)
+                            var myRequest3 = new XMLHttpRequest();
+                            myRequest3.open('GET', '/api/game/' + id + '/player/' + element.id + '/round');
+                            myRequest3.send(null);
+                            myRequest3.onreadystatechange = function () {
+                                if (myRequest3.readyState === 4) {
+                                    let rr;
+                                    if (myRequest3.responseText == 'null') {
+                                        rr = 0;
+                                    } else {
+                                        rr = myRequest3.responseText;
+                                    }
+                                    $("#round" + element.id).html(rr)
+                                    var myRequest4 = new XMLHttpRequest();
+                                    myRequest4.open('GET', '/api/game/' + id + '/player/' + element.id + '/round/' + rr);
+                                    myRequest4.send(null);
+                                    myRequest4.onreadystatechange = function () {
+                                        if (myRequest4.readyState === 4) {
+                                            let tt = JSON.parse(myRequest4.responseText);
+                                            $("#z" + element.id + "1").html(tt[0].zone)
+                                            $("#m" + element.id + "1").html(tt[0].mult)
+                                            $("#p" + element.id + "1").html(tt[0].zone * tt[0].mult)
 
-                                        $("#z"+element.id+"3").html(tt[2].zone)
-                                        $("#m"+element.id+"3").html(tt[2].mult)
-                                        $("#p"+element.id+"3").html(tt[2].zone * tt[2].mult)
+                                            $("#z" + element.id + "2").html(tt[1].zone)
+                                            $("#m" + element.id + "2").html(tt[1].mult)
+                                            $("#p" + element.id + "2").html(tt[1].zone * tt[0].mult)
+
+                                            $("#z" + element.id + "3").html(tt[2].zone)
+                                            $("#m" + element.id + "3").html(tt[2].mult)
+                                            $("#p" + element.id + "3").html(tt[2].zone * tt[2].mult)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            })
-
+                })
+            }
         }
     }
 }
 
-let id = $("#navid").html();
-setup(id)
+let ida = $("#navid").html();
+setup(ida)
 refresh()
 

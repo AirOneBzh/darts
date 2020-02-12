@@ -9,13 +9,14 @@ module.exports = function(server,con,path,fs,dir) {
             const name = req.body.name;
             const pass = req.body.hide;
             const mail = req.body.email;
+            console.log("Signup "+name);
 
-
-            let sql = "SELECT Count(id) as cid from users where email='" + mail + "'";
+            let sql = "SELECT Count(id) as cid from users where email='" + mail + "' or name ='"+name +"'";
             con.query(sql, null, function (err, result, field) {
                 if (err) throw err;
                 nb = parseInt(result[0].cid);
                 if (0 == nb) {
+                    console.log("new")
                     sql = "INSERT INTO users (name, email, password) VALUES ('" + name + "','" + mail + "','" + pass + "')";
                     con.query(sql, null, function (err, result) {
                         if (err) throw err;
@@ -55,16 +56,17 @@ module.exports = function(server,con,path,fs,dir) {
                                     if(err) throw err;
                                     console.log("file copied" + result[0].id)
                                 });
-                                res.redirect("profile?id=" + result[0].id)
+                                res.end(result[0].id.toString())
                             }
                         })
                     });
                 } else {
-                    sql = "SELECT id from users where email='" + mail + "'";
+
+                    sql = "SELECT id from users where email='" + mail + "' or name='"+name+"'";
                     con.query(sql, null, function (err, result) {
                         if (err) throw err;
                         console.log(result);
-                        res.redirect("profile?id=" + result[0].id);
+                        res.end("0");
                     })
 
                 }

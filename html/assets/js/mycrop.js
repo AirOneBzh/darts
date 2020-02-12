@@ -30,4 +30,5 @@
 
     $('#my-image').on('change', function () {
         readFile(this);
+        $uploadCrop.setZoom(0)
     });

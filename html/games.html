@@ -5,9 +5,27 @@
     <meta charset="utf-8">
     <title>Matchs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/colorful.css">
-    <script src="https://kit.fontawesome.com/3c23a7afa3.js" crossorigin="anonymous"></script>
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="assets/css/colorful.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Comfortaa" />
+    <script src="assets/js/fontawesome.js"></script>
+
+    <!-- Croppie -->
+    <link  href="assets/css/croppie.css" rel="stylesheet">
+    <script src="assets/js/croppie.js"></script>
+
+    <!-- JQuery -->
+    <script src="assets/js/jquery.min.js"></script>
+
+    <!-- param -->
+    <script src="assets/js/getParam.js"></script>
+
+
 </head>
 
 <body>
@@ -30,7 +48,7 @@
 </html>
 
 <script>
-    document.getElementById("tab").innerHTML = "En chargement...";
+    $("#tab").html("En chargement...");
     var myRequest = new XMLHttpRequest();
     myRequest.open('GET', '/api/games/');
     myRequest.send(null);
@@ -41,7 +59,7 @@
                 let t = JSON.parse(myRequest.responseText)
 
                 t.forEach((element)=>{
-                    r+="<div class='row games' style='padding: 10px 0px;margin-bottom: 10px;margin-top: 10px;' onclick='document.location.href='/game/"+element.game_id+"' >"+
+                    r+="<div class='row games' style='padding: 10px 0px;margin-bottom: 10px;margin-top: 10px;' onclick=\"document.location.href='/game?id="+element.game_id+"'\" >"+
                         "<div class='col-md-1'>"+ element.game_id+"</div>"+
                     "<div class='col-md-1'>"+ element.game_name+"</div>"+
                     "<div class='col-md-3'>"+element.gamemode +"</div>"+
@@ -49,7 +67,7 @@
                     "</div>";
                 })
             }
-            document.getElementById("tab").innerHTML = r;
+            $("#tab").html(r);
         }}
     function writePlayers(players){
         let r= "<ul style='padding:0px;margin:0px'>";
